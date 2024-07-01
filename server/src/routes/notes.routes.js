@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { uploadNotes , getNotes } from "../controllers/notes.controller.js"
+import { uploadNotes , getNotes , getNotesByID} from "../controllers/notes.controller.js"
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -18,6 +18,10 @@ router.route("/upload").post(
 
 router.route("/getFiles").get(
     getNotes
+)
+
+router.route("/getFiles/:id").get(
+    getNotesByID
 )
 
 export default router;

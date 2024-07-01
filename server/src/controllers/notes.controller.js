@@ -91,7 +91,27 @@ const getNotes = asyncHandler( async (req,res)=>{
 
 })
 
+const getNotesByID = asyncHandler( async (req,res)=>{
+    const userId = req.params.id
+
+    const foundNotes = await Notes.find({
+        uploadedBy: userId
+    })
+
+
+    if(foundNotes.length == 0){
+        throw new ApiError(400,"No data available for particular query")
+    }
+
+    return res.status(201)
+    .json(
+        new ApiResponse(200,foundNotes,"Notes File found Successfully")
+    )
+
+})
+
 export {
     uploadNotes,
-    getNotes
+    getNotes,
+    getNotesByID
 }
