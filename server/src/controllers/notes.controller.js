@@ -56,6 +56,42 @@ const uploadNotes = asyncHandler( async (req,res)=>{
 
 });
 
+const getNotes = asyncHandler( async (req,res)=>{
+    const { title , tags } = req.query
+    const query = {}
+
+    if(!title && !tags){
+        throw new ApiError(400,"Atleast provide one field title or tags.")
+    }
+
+    if(title){
+        query.fileName = {
+            $regex: title,
+            $options:"i"//setting options to i will make our search case insensitive.
+        }
+    }
+
+    if(tags){
+        query.tags = {
+            $regex: tags,
+            $options:"i"
+        }
+    }
+
+    const foundNotes = await Notes.find(query)
+
+    if(foundNotes.length == 0){
+        throw new ApiError(400,"No data available for particular query")
+    }
+
+    return res.status(201)
+    .json(
+        new ApiResponse(200,foundNotes,"Notes File found Successfully")
+    )
+
+})
+
 export {
-    uploadNotes
+    uploadNotes,
+    getNotes
 }
