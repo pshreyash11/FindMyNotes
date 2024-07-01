@@ -10,10 +10,10 @@ const noteSchema = new Schema({
         required:true
     },
     tags:{
-        type: Array,// Here I have taken tags as array.
+        type: String,// Here I have taken tags as array.
         required: true,
     },
-    files:{
+    files:{//This is main file(coudinary url)
         type: String,
         required: true
     },
@@ -26,4 +26,4 @@ const noteSchema = new Schema({
     timestamps:true
 })
 
-export const Note = mongoose.model("Note", noteSchema)
+export const Notes = mongoose.model("Notes", noteSchema)

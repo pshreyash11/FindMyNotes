@@ -19,10 +19,12 @@ app.use(cookieParser());
 
 //routes import
 import userRouter from "./routes/user.routes.js";
-
+import notesRouter from "./routes/notes.routes.js"
 
 app.use("/api/v1/users",userRouter);
-// url will be like this :- http://localhost:8000/api/v1/users/register
+// url will be like this :- http://localhost:5000/api/v1/users/register
 
+
+app.use("/api/v1/notes",notesRouter);
 
 export { app };
