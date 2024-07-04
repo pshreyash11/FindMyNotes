@@ -1,14 +1,26 @@
-import { useState } from 'react'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
+import { Home } from './pages/Home.jsx'
+import { Header } from './Components/Header.jsx'
 
 function App() {
 
   return (
     <>
-      <h1 className="text-3xl text-red-600 font-bold underline">
-      Hello world!
-      </h1>
+      
+      <Router>
+      <Header />
+        <Routes >
+          <Route exact path='/' element={<Home/>}/>
+          {/* <Route path='/about' element={<Home/>}/>
+          <Route path='/faq' element={<Home/>}/>
+          <Route path='/profile' element={<Home/>}/>
+          <Route path='/login' element={<Home/>}/>
+          <Route path='/register' element={<Home/>}/>
+          <Route path='/upload' element={<Home/>}/>
+          <Route path='/search' element={<Home/>}/> */}
+        </Routes>
+      </Router>
     </>
   )
 }
