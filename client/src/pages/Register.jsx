@@ -1,42 +1,67 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"
 
 const Register = () => {
   const [profilePreviewImage, setProfilePreviewImage] = useState("");
   const [profileImage, setProfileImage] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullname, setFullname] = useState("");
   const [userMobile, setUserMobile] = useState("");
   const [userBio, setUserBio] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [userPassword, setUserPassword] = useState("");
+
+
+
+  const registerUser = async (e)=>{
+    try {
+      e.preventDefault();
+      // prevent default because we want to stop reloading page while submitting.
+
+
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("fullname", fullname);
+      formData.append("password", userPassword);
+      formData.append("email", userEmail);
+      formData.append("mobile", userMobile);
+      formData.append("bio", userBio);
+      formData.append("profileImage", profileImage);
+
+      const result = await axios.post(
+        "http://localhost:5000/api/v1/users/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      console.log("Data: ", result);
+      alert("User Entry Saved in Database");
+
+    } catch (error) {
+        console.log("Failed to register user , error : ",error)
+    }
+  }
+
+
 
   return (
     <div className=" flex w-full items-center justify-center bg-[#f3f4f6]">
-      <form className="flex h-full w-full max-w-[420px] flex-col gap-3 bg-white p-5" >
+      <form className="flex h-full w-full max-w-[420px] flex-col gap-3 bg-white p-5" onSubmit={registerUser}>
         <h1 className="text-2xl font-black">Register</h1>
-        <div className="flex items-start justify-center gap-4" >
+        <div className="flex items-start justify-start" >
           <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="firstName">First Name</label>
+            <label className="font-bold" htmlFor="fullname">Full Name</label>
             <input
               type="text"
-              id="firstName"
-              name="firstName"
+              id="fullname"
+              name="fullname"
               className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
-              placeholder="John"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="lastName">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
-              placeholder="Doe"
-              onChange={(e) => setLastName(e.target.value)}
+              placeholder="John Smith"
+              onChange={(e) => setFullname(e.target.value)}
             />
           </div>
         </div>
@@ -76,14 +101,14 @@ const Register = () => {
           />
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userName">UserName</label>
+          <label className="font-bold" htmlFor="username">Username</label>
           <input
             type="text"
-            id="userName"
-            name="userName"
+            id="username"
+            name="username"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
-            placeholder="johndoe123"
-            onChange={(e) => setUserName(e.target.value)}
+            placeholder="johnsmith123"
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="flex flex-col items-start justify-center">
@@ -103,7 +128,7 @@ const Register = () => {
             {profilePreviewImage == "" ? (
               <p className="text-sm font-bold text-gray-500">Profile Image</p>
             ) : (
-              <img  alt="" className="" />
+              <img  src={profilePreviewImage} alt="" className="" />
             )}
           </div>
           <label
