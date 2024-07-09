@@ -59,7 +59,7 @@ export const Header = () => {
         console.log("User Logged out Successfully: ", result);
         setIsLoggedIn(false);
         setUserInfo(null);
-        alert("User Logged out Successfully");
+        // alert("User Logged out Successfully");
         navigate("/");
       }
     } catch (error) {

@@ -25,7 +25,7 @@ const Login = () => {
         navigate("/login");
       } else {
         console.log("User Logged in Successfully: ", result.data);
-        alert("User logged in successfully");
+        // alert("User logged in successfully");
         navigate("/");
       }
   

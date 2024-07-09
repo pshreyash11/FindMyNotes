@@ -14,10 +14,10 @@ export const Hero = () => {
           journey to academic excellence. Simplify your student life, make your
           notes work for you – discover a new era of innovation, start today
         </p>
-        <div className="mt-5">
-          {/* <Link to="/search">
+        {/* <div className="mt-5">
+          <Link to="/search">
             <button className="rounded-xl text-blue-500 bg-white px-7 py-4 font-bold ">Get Started</button>
-          </Link> */}
+          </Link>
           <div className="flex gap-5 justify-center items-center">
             <Link to="/login">
               <button className="rounded-xl bg-white px-7 py-4 font-bold text-blue-500">
@@ -30,7 +30,7 @@ export const Hero = () => {
               </button>
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

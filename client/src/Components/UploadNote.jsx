@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const UploadNote = () => {
 
@@ -7,9 +9,44 @@ const UploadNote = () => {
   const [tags, setTags] = useState("");
   const [file, setFile] = useState("");
 
+  const navigate = useNavigate();
+
+  const submitFile = async (e) => {
+    try {
+      e.preventDefault();
+  
+      const formData = new FormData();
+      formData.append("fileName", title);
+      formData.append("fileDescription", description);
+      formData.append("tags", tags);
+      formData.append("files", file); 
+
+      
+      const token = localStorage.getItem('accessToken'); // Assuming you are storing the token in localStorage
+  
+      const result = await axios.post(
+        "http://localhost:5000/api/v1/notes/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Data: ", result);
+      navigate("/")
+      
+    } catch (error) {
+      console.log("Failed to submit file: ", error);
+      alert("failed to submit the file.")
+    }
+  };
+  
+
 
   return (
-    <form className="flex h-full w-full max-w-[770px] flex-col items-center justify-start  p-5 md:border md:border-gray-300 lg:justify-center">
+    <form className="flex h-full w-full max-w-[770px] flex-col items-center justify-start  p-5 md:border md:border-gray-300 lg:justify-center" onSubmit={submitFile}>
       <h1 className="mb-5 text-2xl font-black">Upload Your Notes</h1>
       <div className="mb-5 w-full max-w-[550px] ">
         <input
