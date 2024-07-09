@@ -9,11 +9,12 @@ import Faq from "./pages/Faq.jsx"
 import Profile from './pages/Profile.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
+import UserContextProvider from './context/UserContextProvider'
 
 function App() {
 
   return (
-    <>
+    <UserContextProvider>
       
       <Router>
       <Header />
@@ -28,7 +29,7 @@ function App() {
           <Route path='/search' element={<Search/>}/>
         </Routes>
       </Router>
-    </>
+    </UserContextProvider>
   )
 }
 

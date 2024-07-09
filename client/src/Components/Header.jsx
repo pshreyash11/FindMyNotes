@@ -1,17 +1,17 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
+import UserContext from '../context/UserContext'
 
 export const Header = () => {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const {user , setUser,isLoggedIn, setIsLoggedIn} = useContext(UserContext)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,17 +24,17 @@ export const Header = () => {
         if (result.data.status === "Error") {
           alert("Please login first !");
           setIsLoggedIn(false);
-          setUserInfo(null);
+          setUser(null);
           navigate("/");
         } else {
           console.log("User data : ", result);
           setIsLoggedIn(true);
-          setUserInfo(result.data.data);
-          console.log("User info - ", userInfo);
+          setUser(result.data.data);
+          console.log("User info that i want - ", user);
         }
       } catch (error) {
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
         console.log(
           "Some error happened while getting user data, Error: ",
           error,
@@ -58,7 +58,7 @@ export const Header = () => {
       } else {
         console.log("User Logged out Successfully: ", result);
         setIsLoggedIn(false);
-        setUserInfo(null);
+        setUser(null);
         // alert("User Logged out Successfully");
         navigate("/");
       }
@@ -80,7 +80,7 @@ export const Header = () => {
         </div>
         {isLoggedIn ? (
           <div className="flex justify-start items-start mx-0">
-            <h1 className="text-2xl font-bold">Hello {userInfo.username} !</h1>
+            <h1 className="text-2xl font-bold">Hello {user.username} !</h1>
           </div>
         ) : null}
         <GiHamburgerMenu className="text-xl md:hidden" />
