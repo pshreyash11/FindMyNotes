@@ -2,6 +2,7 @@ import React, { useEffect, useState , useContext} from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import axios from "axios";
 import UserContext from '../context/UserContext'
+import { useNavigate } from 'react-router-dom';
 
 
 const Profile = () => {
@@ -23,6 +24,12 @@ const Profile = () => {
   }, [userId]);
 
   const numberofUploads = userFiles.length;
+
+  const navigate = useNavigate();
+
+  const showPDF = (fileURL) => {
+    navigate(`/showFile/${encodeURIComponent(fileURL)}`);
+  };
 
   return (
     <div className="lg:h-heightWithoutNavbar flex flex-col items-center justify-center border border-red-500 lg:flex-row">
@@ -57,14 +64,15 @@ const Profile = () => {
         <h1 className="mb-3 text-xl font-black">My Documents :</h1>
         <div className="grid grid-cols-1 gap-5 p-4 sm:grid-cols-2 md:grid-cols-3">
           {userFiles.map((file) => (
-            <a
-              href={`http://localhost:6969/files/${file.files}`}
+            <button
+              // href={`http://localhost:6969/files/${file.files}`}
+              onClick={() => showPDF(file.files)}
               key={file._id}
               className="mb-3 flex h-[35px] max-w-[250px] items-center justify-between gap-10 rounded-xl border border-black px-4"
               target="_blank"
             >
               <p className="font-semibold"> {file.fileName}</p>
-            </a>
+            </button>
           ))}
         </div>
       </div>
