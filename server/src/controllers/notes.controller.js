@@ -57,26 +57,18 @@ const uploadNotes = asyncHandler( async (req,res)=>{
 });
 
 const getNotes = asyncHandler( async (req,res)=>{
-    const { title , tags } = req.query
-    const query = {}
+    const { searchQuery } = req.query;
 
-    if(!title && !tags){
-        throw new ApiError(400,"Atleast provide one field title or tags.")
-    }
+  if (!searchQuery) {
+    throw new ApiError(400, "Please provide a search query.");
+  }
 
-    if(title){
-        query.fileName = {
-            $regex: title,
-            $options:"i"//setting options to i will make our search case insensitive.
-        }
-    }
-
-    if(tags){
-        query.tags = {
-            $regex: tags,
-            $options:"i"
-        }
-    }
+  const query = {
+    $or: [
+      { fileName: { $regex: searchQuery, $options: "i" } },
+      { tags: { $regex: searchQuery, $options: "i" } },
+    ],
+  };
 
     const foundNotes = await Notes.find(query)
 

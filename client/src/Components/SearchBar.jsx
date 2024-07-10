@@ -19,7 +19,7 @@ const SearchBar = () => {
     try {
       const notes = await axios.get('http://localhost:5000/api/v1/notes/getFiles', {
         params: {
-          title: searchQuery,
+          searchQuery: searchQuery,
         },
       });
 
@@ -66,11 +66,12 @@ const SearchBar = () => {
         {searchStatus === 'Found' && searchResults.length > 0 && searchResults.map((notes) => (
           <div
             key={notes._id}
-            className="flex w-full max-w-[300px] flex-wrap-reverse items-center justify-between rounded-xl bg-[#374151] px-3 py-2 text-white shadow-lg"
+            className="flex w-full max-w-[400px] flex-wrap-reverse items-center justify-between rounded-xl bg-[#374151] px-3 py-4 text-white shadow-lg "
           >
-            <p className="mt-2 text-sm">
+            <p className="mt-2 text-md ">
               <span className="font-bold">File name: </span>
               <span>{notes.fileName} </span>
+              <span className='ml-8 bg-orange-500 px-2 py-1 rounded-lg text-blue-900 font-bold'>{notes.tags}</span>
             </p>
             <button onClick={() => showPDF(notes.files)}> <FaExternalLinkAlt/> </button>
           </div>
