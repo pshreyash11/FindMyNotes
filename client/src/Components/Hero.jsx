@@ -9,7 +9,7 @@ export const Hero = () => {
   return (
     <div className="relative flex h-full items-center justify-center bg-unsplashBgImage bg-cover bg-center">
       <div className="absolute inset-0 bg-black opacity-70" />
-      <div className="relative z-10 w-full max-w-[860px] text-center text-white">
+      <div className="relative z-8 w-full max-w-[860px] text-center text-white">
         <h1 className="text-5xl font-bold md:text-5xl">FIND MY NOTES</h1>
         <p className="mt-5 text-sm font-light md:text-xl md:font-normal">
           Welcome to Find My Notes – where students unite for effortless

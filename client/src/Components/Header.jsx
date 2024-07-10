@@ -1,17 +1,23 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect , useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { GiHamburgerMenu } from "react-icons/gi";
-import UserContext from '../context/UserContext'
+import { MdMenu, MdClose } from "react-icons/md";
+import UserContext from "../context/UserContext";
 
 export const Header = () => {
+  const [nav, setNav] = useState(false);
+
+  const handleNav = () => {
+    setNav(!nav);
+  };
+
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  const {user , setUser,isLoggedIn, setIsLoggedIn} = useContext(UserContext)
+  const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -79,11 +85,16 @@ export const Header = () => {
           <img src="/logo.png" alt="logo" />
         </div>
         {isLoggedIn ? (
-          <div className="flex justify-start items-start mx-0">
-            <h1 className="text-2xl font-bold">Hello {user.username} !</h1>
+          <div className="mx-0 flex items-start justify-start">
+            <h1 className="text-xl font-bold">Hello {user.username} !</h1>
           </div>
         ) : null}
-        <GiHamburgerMenu className="text-xl md:hidden" />
+
+
+        <div onClick={handleNav} className="block md:hidden">
+          {nav ? <MdClose size={30} /> : <MdMenu size={30} />}
+        </div>
+
         <div className="hidden md:flex md:items-center md:justify-center md:gap-4">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
@@ -119,6 +130,70 @@ export const Header = () => {
                   Register
                 </button>
               </Link>
+            </>
+          )}
+        </div>
+
+        <div
+          className={
+            nav
+              ? "fixed left-0 top-0 z-10 h-[100vh] w-[60%] border-r border-r-gray-900 bg-[#000300] p-4 text-white duration-500 ease-in-out "
+              : "fixed left-[-100%]"
+          }
+        >
+          <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5 mt-10">
+            <Link to="/">Home</Link>
+          </div>
+          <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+            <Link to="/about">About</Link>
+          </div>
+          {isLoggedIn ? (
+            <>
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <Link to="/search" className="text-xl">
+                  <FaSearch />
+                </Link>
+              </div>
+
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <Link to="/upload" className="text-[24px]">
+                  <MdOutlineFileUpload />
+                </Link>
+              </div>
+
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <Link to="/profile">
+                  <button className="my-4 text-blue-500 px-5 py-2 font-bold ">
+                    Profile
+                  </button>
+                </Link>
+              </div>
+
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <button
+                  className="my-4  px-5 py-2 font-bold text-blue-500"
+                  onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <Link to="/login">
+                  <div className="my-4  px-5 py-2 font-bold text-blue-500">
+                    Login
+                  </div>
+                </Link>
+              </div>
+
+              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+                <Link to="/register">
+                  <div className="my-4  px-5 py-2 font-bold text-blue-500">
+                    Register
+                  </div>
+                </Link>
+              </div>
             </>
           )}
         </div>

@@ -34,13 +34,13 @@ const Footer = () => {
           </h2>
           <ul className="text-gray-600">
             <li className="mb-1">
-              <Link to="/about">+91 99879 90097</Link>
+              <Link to="/about">+91 7894561230</Link>
             </li>
             <li className="mb-1">
-              <Link to="/faq">+91 97649 35361</Link>
+              <Link to="/faq">+91 9876543210</Link>
             </li>
             <li className="mb-1">
-              <Link to="/faq">findmynotes2022@gmail.com</Link>
+              <Link to="/faq">findmynotesCOEP@gmail.com</Link>
             </li>
           </ul>
         </div>
