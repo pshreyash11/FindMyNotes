@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { FaExternalLinkAlt } from "react-icons/fa";
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,7 +49,7 @@ const SearchBar = () => {
             <input
               type="search"
               placeholder="Seach for Notes"
-              className="ml-3 w-full bg-[#374151] text-white"
+              className="ml-3 w-full bg-[#374151] text-white pl-3 pt-1 text-xl"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -71,7 +72,7 @@ const SearchBar = () => {
               <span className="font-bold">File name: </span>
               <span>{notes.fileName} </span>
             </p>
-            <button onClick={() => showPDF(notes.files)}>Show PDF</button>
+            <button onClick={() => showPDF(notes.files)}> <FaExternalLinkAlt/> </button>
           </div>
         ))}
 

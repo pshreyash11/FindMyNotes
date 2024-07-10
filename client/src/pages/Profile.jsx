@@ -72,6 +72,7 @@ const Profile = () => {
               target="_blank"
             >
               <p className="font-semibold"> {file.fileName}</p>
+              <FaExternalLinkAlt/>
             </button>
           ))}
         </div>
