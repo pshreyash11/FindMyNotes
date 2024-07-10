@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link , useNavigate} from "react-router-dom";
 import axios from "axios";
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,16 +23,22 @@ const Login = () => {
       console.log("Server response:", result.data);
   
       if (result.data.status === "Error") {
-        alert("Wrong credentials!");
+        toast.error("Failed to login user !.",{
+          position: "top-center"
+        });
         navigate("/login");
       } else {
         console.log("User Logged in Successfully: ", result.data);
-        // alert("User logged in successfully");
+        toast.success("User Logged In successfully!",{
+          position: "top-center"
+        });
         navigate("/");
       }
   
     } catch (error) {
-      alert("Wrong credentials.");
+      toast.error("Failed to login user !",{
+        position: "top-center"
+      });
       console.log("Cannot Login the User: ", error.response ? error.response.data : error.message);
     }
   };

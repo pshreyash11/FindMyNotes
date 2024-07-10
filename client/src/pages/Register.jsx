@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios"
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [profilePreviewImage, setProfilePreviewImage] = useState("");
@@ -18,6 +20,14 @@ const Register = () => {
     try {
       e.preventDefault();
       // prevent default because we want to stop reloading page while submitting.
+
+      if(
+        [username , fullname , userPassword, userEmail , userMobile , userBio , profileImage].some((field)=> field?.trim() === "")
+    ){
+      toast.warn("Looks like you missed something ?",{
+        position: "top-center"
+      });
+    }
 
 
       const formData = new FormData();
@@ -39,10 +49,19 @@ const Register = () => {
         },
       );
       console.log("Data: ", result);
-      alert("User Entry Saved in Database");
+      // alert("User Entry Saved in Database");
+      toast.success("User registered successfully!",{
+        position: "top-center"
+      });
 
     } catch (error) {
         console.log("Failed to register user , error : ",error)
+        toast.error("Failed to register user !.",{
+          position: "top-center"
+        });
+        toast.info("Maybe user already exist.",{
+          position: "top-center"
+        })
     }
   }
 

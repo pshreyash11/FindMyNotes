@@ -6,6 +6,8 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { MdMenu, MdClose } from "react-icons/md";
 import UserContext from "../context/UserContext";
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Header = () => {
   const [nav, setNav] = useState(false);
@@ -65,11 +67,15 @@ export const Header = () => {
         console.log("User Logged out Successfully: ", result);
         setIsLoggedIn(false);
         setUser(null);
-        // alert("User Logged out Successfully");
+        toast.success("User Logged out successfully!",{
+          position: "top-center"
+        });
         navigate("/");
       }
     } catch (error) {
-      alert("Can't Logout user.");
+      toast.error("Can't perform logout action !.",{
+        position: "top-center"
+      });
       console.error(
         "Some error happened while logging out user. Error: ",
         error.response ? error.response.data : error.message,

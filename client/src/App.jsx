@@ -11,12 +11,14 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import UserContextProvider from './context/UserContextProvider';
 import PDFViewer from './pages/PDFViewer.jsx';
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <UserContextProvider>
       <Router>
         <Header />
+        <ToastContainer />
         <Routes>
           <Route exact path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
