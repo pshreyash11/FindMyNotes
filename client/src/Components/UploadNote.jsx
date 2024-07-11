@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const UploadNote = () => {
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
@@ -12,40 +13,59 @@ const UploadNote = () => {
   const navigate = useNavigate();
 
   const submitFile = async (e) => {
-    try {
-      e.preventDefault();
-  
-      const formData = new FormData();
-      formData.append("fileName", title);
-      formData.append("fileDescription", description);
-      formData.append("tags", tags);
-      formData.append("files", file); 
+    e.preventDefault();
 
-      
-      const token = localStorage.getItem('accessToken'); // Assuming you are storing the token in localStorage
-  
-      const result = await axios.post(
-        "http://localhost:5000/api/v1/notes/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Data: ", result);
-      navigate("/")
-      
+    if (file.size > 10 * 1024 * 1024) { 
+      toast.error("File size exceeds 10MB limit.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fileName", title);
+    formData.append("fileDescription", description);
+    formData.append("tags", tags);
+    formData.append("files", file);
+
+
+    const token = localStorage.getItem("accessToken");
+
+    const uploadPromise = axios.post(
+      "http://localhost:5000/api/v1/notes/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+
+    toast.promise(
+      uploadPromise,
+      {
+        pending: "Uploading file...",
+        success: "File uploaded successfully!",
+        error: "Failed to upload file.",
+      },{
+        position: "top-center"
+      }
+    );
+
+    try {
+      const result = await uploadPromise;
+      console.log("Data:", result);
+      navigate("/");
     } catch (error) {
-      console.log("Failed to submit file: ", error);
-      alert("failed to submit the file.")
+      console.error("Failed to submit file:", error.response);
+      if (error.response) {
+        console.error("Error data:", error.response.data);
+      }
     }
   };
-  
 
 
   return (
+    
     <form className="flex h-full w-full max-w-[770px] flex-col items-center justify-start  p-5 md:border md:border-gray-300 lg:justify-center" onSubmit={submitFile}>
       <h1 className="mb-5 text-2xl font-black">Upload Your Notes</h1>
       <div className="mb-5 w-full max-w-[550px] ">

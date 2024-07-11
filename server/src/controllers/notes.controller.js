@@ -24,6 +24,7 @@ const uploadNotes = asyncHandler( async (req,res)=>{
 
 
     const noteFileLocalPath = req.files?.files[0].path;
+    console.log("Note file path is ",noteFileLocalPath)
 
 
     if(!noteFileLocalPath){
