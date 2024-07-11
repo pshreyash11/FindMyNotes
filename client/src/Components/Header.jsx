@@ -6,8 +6,10 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { MdMenu, MdClose } from "react-icons/md";
 import UserContext from "../context/UserContext";
-import {toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 export const Header = () => {
   const [nav, setNav] = useState(false);
@@ -67,14 +69,14 @@ export const Header = () => {
         console.log("User Logged out Successfully: ", result);
         setIsLoggedIn(false);
         setUser(null);
-        toast.success("User Logged out successfully!",{
-          position: "top-center"
+        toast.success("User Logged out successfully!", {
+          position: "top-center",
         });
         navigate("/");
       }
     } catch (error) {
-      toast.error("Can't perform logout action !.",{
-        position: "top-center"
+      toast.error("Can't perform logout action !.", {
+        position: "top-center",
       });
       console.error(
         "Some error happened while logging out user. Error: ",
@@ -96,7 +98,6 @@ export const Header = () => {
           </div>
         ) : null}
 
-
         <div onClick={handleNav} className="block md:hidden">
           {nav ? <MdClose size={30} /> : <MdMenu size={30} />}
         </div>
@@ -113,28 +114,20 @@ export const Header = () => {
                 <MdOutlineFileUpload />
               </Link>
               <Link to="/profile">
-                <button className="rounded-xl bg-blue-500 px-5 py-2 font-bold hover:bg-blue-700">
-                  Profile
-                </button>
+                <AwesomeButton type="primary">Profile</AwesomeButton>
               </Link>
-              <button
-                className="rounded-xl bg-blue-500 px-5 py-2 font-bold hover:bg-blue-700"
-                onClick={handleLogout}
-              >
+
+              <AwesomeButton type="primary" onPress={handleLogout}>
                 Logout
-              </button>
+              </AwesomeButton>
             </>
           ) : (
             <>
               <Link to="/login">
-                <button className="rounded-xl bg-blue-500 px-5 py-2 font-bold hover:bg-blue-700">
-                  Login
-                </button>
+                <AwesomeButton type="primary">Login</AwesomeButton>
               </Link>
               <Link to="/register">
-                <button className="rounded-xl bg-blue-500 px-5 py-2 font-bold hover:bg-blue-700">
-                  Register
-                </button>
+                <AwesomeButton type="primary">Register</AwesomeButton>
               </Link>
             </>
           )}
@@ -143,59 +136,60 @@ export const Header = () => {
         <div
           className={
             nav
-              ? "fixed left-0 top-0 z-10 h-[100vh] w-[60%] border-r border-r-gray-900 bg-[#000300] p-4 text-white duration-500 ease-in-out "
+              ? "fixed left-0 top-0 z-10 h-[100vh] w-[60%] border-r border-r-gray-900 bg-[#000300] p-4 text-white duration-500 ease-in-out"
               : "fixed left-[-100%]"
           }
         >
-          <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5 mt-10">
+          <div className="mx-5 mt-10 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
             <Link to="/">Home</Link>
           </div>
-          <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+          <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
             <Link to="/about">About</Link>
           </div>
           {isLoggedIn ? (
             <>
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <Link to="/search" className="text-xl">
                   <FaSearch />
                 </Link>
               </div>
 
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <Link to="/upload" className="text-[24px]">
                   <MdOutlineFileUpload />
                 </Link>
               </div>
 
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <Link to="/profile">
-                  <button className="my-4 text-blue-500 px-5 py-2 font-bold ">
+                  <button className="my-4 px-5 py-2 font-bold text-blue-500">
                     Profile
                   </button>
                 </Link>
               </div>
 
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <button
-                  className="my-4  px-5 py-2 font-bold text-blue-500"
-                  onClick={handleLogout}>
+                  className="my-4 px-5 py-2 font-bold text-blue-500"
+                  onClick={handleLogout}
+                >
                   Logout
                 </button>
               </div>
             </>
           ) : (
             <>
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <Link to="/login">
-                  <div className="my-4  px-5 py-2 font-bold text-blue-500">
+                  <div className="my-4 px-5 py-2 font-bold text-blue-500">
                     Login
                   </div>
                 </Link>
               </div>
 
-              <div className="border-b border-b-gray-400 h-[8%] flex justify-center items-center text-2xl mx-5">
+              <div className="mx-5 flex h-[8%] items-center justify-center border-b border-b-gray-400 text-2xl">
                 <Link to="/register">
-                  <div className="my-4  px-5 py-2 font-bold text-blue-500">
+                  <div className="my-4 px-5 py-2 font-bold text-blue-500">
                     Register
                   </div>
                 </Link>
