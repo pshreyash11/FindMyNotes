@@ -103,8 +103,41 @@ const getNotesByID = asyncHandler( async (req,res)=>{
 
 })
 
+
+const updateNotes = asyncHandler(async (req, res) => {
+    const noteId = req.params.id;
+    const { fileName, fileDescription, tags } = req.body;
+  
+    const note = await Notes.findById(noteId);
+  
+    if (!note) {
+      throw new ApiError(404, "Note not found");
+    }
+  
+    if (fileName?.trim()) note.fileName = fileName;
+    if (fileDescription?.trim()) note.fileDescription = fileDescription;
+    if (tags?.trim()) note.tags = tags;
+  
+    if (req.files?.files) {
+      const noteFileLocalPath = req.files.files[0].path;
+      const noteFile = await uploadOnCloudinary(noteFileLocalPath);
+  
+      if (!noteFile) {
+        throw new ApiError(400, "Notes file upload to Cloudinary failed");
+      }
+  
+      note.files = noteFile.url;
+    }
+  
+    const updatedNote = await note.save();
+  
+    return res.status(200).json(new ApiResponse(200, updatedNote, "Notes updated successfully"));
+  });
+  
+
 export {
     uploadNotes,
     getNotes,
-    getNotesByID
+    getNotesByID,
+    updateNotes
 }

@@ -12,6 +12,7 @@ import Register from './pages/Register.jsx';
 import UserContextProvider from './context/UserContextProvider';
 import PDFViewer from './pages/PDFViewer.jsx';
 import { ToastContainer } from "react-toastify";
+import UpdateFile from './pages/UpdateFile.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/upload' element={<Upload />} />
           <Route path='/search' element={<Search />} />
           <Route path="/showFile/:fileURL" element={<PDFViewer />} />
+          <Route path="/update-file/:fileId" element={<UpdateFile />} />
         </Routes>
       </Router>
     </UserContextProvider>
