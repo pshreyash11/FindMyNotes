@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +8,7 @@ const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
+  const [hoveredFileId, setHoveredFileId] = useState(null);
 
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -44,11 +44,11 @@ const SearchBar = () => {
     <div className="h-heightWithoutNavbar flex flex-col items-center justify-start p-4">
       <div className="flex w-full items-center justify-center">
         <form className="w-full max-w-[700px] rounded-xl border border-black bg-[#374151] p-4" onSubmit={handleSearch}>
-          <div className=" flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <FaSearch className="text-2xl text-white" />
             <input
               type="search"
-              placeholder="Seach for Notes"
+              placeholder="Search for Notes"
               className="ml-3 w-full bg-[#374151] text-white pl-3 pt-1 text-xl"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -63,17 +63,24 @@ const SearchBar = () => {
         </form>
       </div>
       <div className="mt-5 grid w-full grid-cols-1 gap-5 border sm:grid-cols-2 lg:grid-cols-4">
-        {searchStatus === 'Found' && searchResults.length > 0 && searchResults.map((notes) => (
+        {searchStatus === 'Found' && searchResults.length > 0 && searchResults.map((note) => (
           <div
-            key={notes._id}
-            className="flex w-full max-w-[400px] flex-wrap-reverse items-center justify-between rounded-xl bg-[#374151] px-3 py-4 text-white shadow-lg "
+            key={note._id}
+            className="relative flex w-full max-w-[400px] flex-wrap-reverse items-center justify-between rounded-xl bg-[#374151] px-3 py-4 text-white shadow-lg"
+            onMouseEnter={() => setHoveredFileId(note._id)}
+            onMouseLeave={() => setHoveredFileId(null)}
           >
             <p className="mt-2 text-md ">
               <span className="font-bold">File name: </span>
-              <span>{notes.fileName} </span>
-              <span className='ml-8 bg-orange-500 px-2 py-1 rounded-lg text-blue-900 font-bold'>{notes.tags}</span>
+              <span>{note.fileName} </span>
+              <span className='ml-8 bg-orange-500 px-2 py-1 rounded-lg text-blue-900 font-bold'>{note.tags}</span>
             </p>
-            <button onClick={() => showPDF(notes.files)}> <FaExternalLinkAlt/> </button>
+            <button onClick={() => showPDF(note.files)}> <FaExternalLinkAlt/> </button>
+            {hoveredFileId === note._id && (
+              <div className="absolute top-full left-0 mt-2 w-full rounded-lg bg-gray-800 p-4 text-white shadow-lg">
+                <p>{note.fileDescription}</p>
+              </div>
+            )}
           </div>
         ))}
 
