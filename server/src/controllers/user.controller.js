@@ -27,7 +27,7 @@ const registerUser = asyncHandler( async (req,res)=>{
     const { fullname , email, username, password, mobile ,bio} = req.body
 
     if(
-        [fullname,email,username,password,mobile,bio].some((field)=> field?.trim() === "")
+        [fullname,email,username,password , bio].some((field)=> String(field)?.trim() === "")
     ){
         throw new ApiError(400,"All fields are required")
     }
@@ -64,6 +64,8 @@ const registerUser = asyncHandler( async (req,res)=>{
         username:username.toLowerCase()
     })
 
+    const {accessToken,refreshToken} = await generateAccessAndRefreshTokens(user._id)
+
     //remove password and refreshtoken
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -74,9 +76,23 @@ const registerUser = asyncHandler( async (req,res)=>{
         throw new ApiError(500,"Something went wrong while registering the user.")
     }
 
+    const options = {
+        httpOnly:true,
+        secure:true
+        // by setting httpOnly and secure true , cookies will only will be modified by server only (not by frontend)
+    }
+
     //return response
-    return res.status(201).json(
-        new ApiResponse(200,createdUser,"User registered Successfully.")
+    return res
+    .status(201)
+    .cookie("accessToken",accessToken,options)
+    .cookie("refreshToken",refreshToken,options)
+    .json(
+        new ApiResponse(200,
+            {
+                user:createdUser,accessToken,refreshToken
+            },
+            "User registered Successfully.")
     )
 
 

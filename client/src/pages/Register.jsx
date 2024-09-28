@@ -22,7 +22,7 @@ const Register = () => {
       // prevent default because we want to stop reloading page while submitting.
 
       if(
-        [username , fullname , userPassword, userEmail , userMobile , userBio , profileImage].some((field)=> field?.trim() === "")
+        [username , fullname , userPassword, userEmail , userBio , profileImage].some((field)=> String(field)?.trim() === "")
     ){
       toast.warn("Looks like you missed something ?",{
         position: "top-center"
