@@ -292,11 +292,39 @@ const updateUserProfileImage = asyncHandler(async(req,res)=>{
     ).select("-password")
 
     return res
-    .status()
+    .status(200)
     .json(
         new ApiResponse(200,user,"Profile Image updated Successfully.")
     )
 })
+
+
+const saveNoteToUser = asyncHandler(async(req,res)=>{
+    const user = await User.findById(req.user?._id);
+    if(!user){
+        throw new ApiError(400,"User not found while accessing saved notes.")
+    }
+
+    const notesID = req.body.notesID;
+    if(!notesID){
+        throw new ApiError(400,"Notes ID is required to save the notes")
+    }
+
+    if (user.savedNotes.includes(notesID)) {
+        return res.status(400).json({ message: "Note is already saved." });
+    }
+
+    user.savedNotes.push(notesID)
+    await user.save()
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,user,"Note saved Successfully.")
+    )
+
+})
+
 
 
 export {
@@ -308,5 +336,5 @@ export {
      getCurrentUser,
      updateAccountDetails,
      updateUserProfileImage,
-     
+     saveNoteToUser
 };

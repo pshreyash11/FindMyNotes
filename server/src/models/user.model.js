@@ -41,7 +41,11 @@ const userSchema = new Schema({
     },
     refreshToken:{
         type:String
-    }
+    },
+    savedNotes:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Notes"
+    }]
 })
 
 userSchema.pre("save",async function(next){
