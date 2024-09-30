@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FaSearch, FaExternalLinkAlt, FaRegStar, FaStar } from 'react-icons/fa';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,13 @@ const SearchBar = () => {
 
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+
+  // Initialize savedFiles with user.savedNotes when the component mounts or when the user changes
+  useEffect(() => {
+    if (user?.savedNotes) {
+      setSavedFiles(user.savedNotes);
+    }
+  }, [user]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -42,22 +49,40 @@ const SearchBar = () => {
   };
 
   const isSavedFile = (fileID) => {
-    return savedFiles.includes(fileID) || user?.savedNotes?.includes(fileID);
+    return savedFiles.includes(fileID);
   };
 
   const saveTheFile = async (notesID) => {
+    // Optimistically update the UI
+    setSavedFiles((prevFiles) => [...prevFiles, notesID]);
+
     try {
       const response = await axios.post("http://localhost:5000/api/v1/users/save-note", {
-        notesID
+        notesID,
       });
 
       console.log("Note saved successfully!");
-
-      // After saving, update the local savedFiles state to reflect the change in the UI
-      setSavedFiles((prevFiles) => [...prevFiles, notesID]);
-
     } catch (error) {
       console.error("Error saving note:", error);
+      // Revert the UI update if there is an error
+      setSavedFiles((prevFiles) => prevFiles.filter((id) => id !== notesID));
+    }
+  };
+
+  const unSaveNote = async (notesID) => {
+    // Optimistically update the UI
+    setSavedFiles((prevFiles) => prevFiles.filter((id) => id !== notesID));
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/users/unsave-note", {
+        notesID,
+      });
+
+      console.log("Note unsaved successfully!");
+    } catch (error) {
+      console.error("Error unsaving note:", error);
+      // Revert the UI update if there is an error
+      setSavedFiles((prevFiles) => [...prevFiles, notesID]);
     }
   };
 
@@ -98,20 +123,16 @@ const SearchBar = () => {
               <span className='ml-8 bg-orange-500 px-2 py-1 rounded-lg text-blue-900 font-bold'>{note.tags}</span>
             </p>
             <div className="flex items-center">
-              {/* Conditionally render the star icon */}
               {isSavedFile(note._id) ? (
-                <button className="mr-4">
+                <button className="mr-4" onClick={() => unSaveNote(note._id)}>
                   <FaStar className="text-yellow-500" />
                 </button>
               ) : (
-                <button
-                  className="mr-4"
-                  onClick={() => saveTheFile(note._id)}
-                >
+                <button className="mr-4" onClick={() => saveTheFile(note._id)}>
                   <FaRegStar className="text-gray-400" />
                 </button>
               )}
-              <button onClick={() => showPDF(note.files)}> <FaExternalLinkAlt/> </button>
+              <button onClick={() => showPDF(note.files)}> <FaExternalLinkAlt /> </button>
             </div>
 
             {hoveredFileId === note._id && (

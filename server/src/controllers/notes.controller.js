@@ -103,6 +103,23 @@ const getNotesByID = asyncHandler( async (req,res)=>{
 
 })
 
+const getNotesByNotesId = asyncHandler(async (req, res) => {
+    const { notesID } = req.body; // This should be an array
+  
+    if (!notesID || notesID.length === 0) {
+      throw new ApiError(400, "No note IDs provided");
+    }
+  
+    // Fetch multiple notes with the provided IDs
+    const notes = await Notes.find({ _id: { $in: notesID } });
+  
+    if (!notes || notes.length === 0) {
+      throw new ApiError(404, "No notes found");
+    }
+  
+    return res.status(200).json(new ApiResponse(200, notes, "Notes found successfully!"));
+  });
+  
 
 const updateNotes = asyncHandler(async (req, res) => {
     const noteId = req.params.id;
@@ -139,5 +156,6 @@ export {
     uploadNotes,
     getNotes,
     getNotesByID,
-    updateNotes
+    updateNotes,
+    getNotesByNotesId
 }

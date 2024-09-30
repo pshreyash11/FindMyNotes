@@ -325,6 +325,30 @@ const saveNoteToUser = asyncHandler(async(req,res)=>{
 
 })
 
+const unSaveNote = asyncHandler(async(req,res)=>{
+    const user = await User.findById(req.user?._id);
+    if(!user){
+        throw new ApiError(400,"User not found while unSaving notes.")
+    }
+
+    const notesID = req.body.notesID;
+    if(!notesID){
+        throw new ApiError(400,"Notes ID is required to Unsave the notes")
+    }
+
+    if (user.savedNotes.includes(notesID) == false) {
+        return res.status(400).json({ message: "Note is not present in the saved notes." });
+    }
+    
+    user.savedNotes.remove(notesID)
+    await user.save();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,user,"Note Unsaved Successfully!")
+    )
+}) 
 
 
 export {
@@ -336,5 +360,6 @@ export {
      getCurrentUser,
      updateAccountDetails,
      updateUserProfileImage,
-     saveNoteToUser
+     saveNoteToUser,
+     unSaveNote
 };

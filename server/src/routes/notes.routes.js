@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { uploadNotes , getNotes , getNotesByID , updateNotes } from "../controllers/notes.controller.js"
+import { uploadNotes , getNotes , getNotesByID , updateNotes , getNotesByNotesId } from "../controllers/notes.controller.js"
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -29,5 +29,9 @@ router.route("/update/:id").patch(
     upload.fields([{ name: "files", maxCount: 1 }]),
     updateNotes
   );
+
+router.route("/getNoteWithID").post(
+    getNotesByNotesId
+)
 
 export default router;
