@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react';
-import { FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaSearch, FaExternalLinkAlt, FaRegStar, FaStar } from 'react-icons/fa';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ const SearchBar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
   const [hoveredFileId, setHoveredFileId] = useState(null);
+  const [savedFiles, setSavedFiles] = useState([]);
 
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -26,7 +27,7 @@ const SearchBar = () => {
       if (notes.data.data.length > 0) {
         setSearchResults(notes.data.data);
         setSearchStatus('Found');
-        console.log('Notes fetched successfully :- ', notes.data.data);
+        console.log('Notes fetched successfully: ', notes.data.data);
       } else {
         setSearchResults([]);
         setSearchStatus('Not-Found');
@@ -38,6 +39,26 @@ const SearchBar = () => {
 
   const showPDF = (fileURL) => {
     navigate(`/showFile/${encodeURIComponent(fileURL)}`);
+  };
+
+  const isSavedFile = (fileID) => {
+    return savedFiles.includes(fileID) || user?.savedNotes?.includes(fileID);
+  };
+
+  const saveTheFile = async (notesID) => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/users/save-note", {
+        notesID
+      });
+
+      console.log("Note saved successfully!");
+
+      // After saving, update the local savedFiles state to reflect the change in the UI
+      setSavedFiles((prevFiles) => [...prevFiles, notesID]);
+
+    } catch (error) {
+      console.error("Error saving note:", error);
+    }
   };
 
   return (
@@ -62,6 +83,7 @@ const SearchBar = () => {
           </div>
         </form>
       </div>
+
       <div className="mt-5 grid w-full grid-cols-1 gap-5 border sm:grid-cols-2 lg:grid-cols-4">
         {searchStatus === 'Found' && searchResults.length > 0 && searchResults.map((note) => (
           <div
@@ -75,7 +97,23 @@ const SearchBar = () => {
               <span>{note.fileName} </span>
               <span className='ml-8 bg-orange-500 px-2 py-1 rounded-lg text-blue-900 font-bold'>{note.tags}</span>
             </p>
-            <button onClick={() => showPDF(note.files)}> <FaExternalLinkAlt/> </button>
+            <div className="flex items-center">
+              {/* Conditionally render the star icon */}
+              {isSavedFile(note._id) ? (
+                <button className="mr-4">
+                  <FaStar className="text-yellow-500" />
+                </button>
+              ) : (
+                <button
+                  className="mr-4"
+                  onClick={() => saveTheFile(note._id)}
+                >
+                  <FaRegStar className="text-gray-400" />
+                </button>
+              )}
+              <button onClick={() => showPDF(note.files)}> <FaExternalLinkAlt/> </button>
+            </div>
+
             {hoveredFileId === note._id && (
               <div className="absolute top-full left-0 mt-2 w-full rounded-lg bg-gray-800 p-4 text-white shadow-lg">
                 <p>{note.fileDescription}</p>
