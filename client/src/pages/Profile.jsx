@@ -41,6 +41,7 @@ const Profile = () => {
   }, [userId, user.savedNotes]);
 
   const numberofUploads = userFiles.length;
+  const numberofSavedFiles = savedFiles.length;
 
   const navigate = useNavigate();
 
@@ -98,10 +99,16 @@ const Profile = () => {
           <p className="mt-1 text-center">{user.username}</p>
           <p className="mt-1 text-center">{user.bio}</p>
         </div>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-4 my-8">
           <div className="grid h-[80px] w-[100px] place-content-center">
-            <p className="text-center text-[12px] font-bold">No. of Uploads:</p>
-            <p className="text-center text-5xl font-black">{numberofUploads}</p>
+            <p className="text-center text-[18px] font-bold">No. of Uploads:</p>
+            <p className="text-center text-4xl font-black">{numberofUploads}</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-4 my-4">
+          <div className="grid h-[80px] w-[100px] place-content-center">
+            <p className="text-center text-[18px] font-bold">No. of Saved Files:</p>
+            <p className="text-center text-5xl font-black">{numberofSavedFiles}</p>
           </div>
         </div>
       </div>
